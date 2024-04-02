@@ -1,0 +1,33 @@
+"This file contains the code for creating Tkinter GUI elements, such as windows, forms, buttons, etc."
+
+import tkinter as tk
+from tkinter import ttk  # ttk is the themed tk module for widgets that look like the OS
+
+
+def toggle_fullscreen(event=None):
+    global fullscreen
+    fullscreen = not fullscreen
+    root.attributes("-fullscreen", fullscreen)
+
+
+def close_window():
+    root.destroy()
+
+root = tk.Tk()
+root.title("Fullscreen Window")
+
+# Set up fullscreen variable
+fullscreen = False
+
+# Bind F11 key to toggle fullscreen
+root.bind("<F11>", toggle_fullscreen)
+root.bind("<Escape>", toggle_fullscreen)
+
+# Create a button to close the window
+close_button = ttk.Button(root, text="Close", command=close_window)
+close_button.pack(pady=20)
+
+# Call toggle_fullscreen to initially set the window to fullscreen
+toggle_fullscreen()
+
+root.mainloop()
