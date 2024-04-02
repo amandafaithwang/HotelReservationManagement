@@ -3,7 +3,7 @@ import sqlite3
 
 # this file is comparable to the models.py file in the demo repo
 
-# note we should consider if we're gonna use CSV or .db
+# note we should consider if we're gonna use CSV or .db: I JUST ADDED THE DATABASE CODE TO THE REPO - Cami
 # the demo uses .db and there are a lot of complexities with CSVs (refer to quiz)
 # if we use .db we have to include some conversion code here from CSV to .db
 # have to figur eout where to reference the file (FILENAME = "project_data.db") OR (FILENAME = "project_data.csv") and read with pandas dataframe
