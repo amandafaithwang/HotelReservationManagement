@@ -1,33 +1,80 @@
-"This file contains the code for creating Tkinter GUI elements, such as windows, forms, buttons, etc."
+"""This file contains the code for creating Tkinter GUI elements, such as windows, forms, buttons, etc."""
 
 import tkinter as tk
 from tkinter import ttk  # ttk is the themed tk module for widgets that look like the OS
+from tkinter import Tk
 
 
-def toggle_fullscreen(event=None):
-    global fullscreen
-    fullscreen = not fullscreen
-    root.attributes("-fullscreen", fullscreen)
+class LoginWindow:  # Class for the Log In Window to enter username and password to access the main GUI
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Log In to the Hotel Reservation Management System")
+
+        # Calculate the coordinates for the top left corner of the window to center it
+        window_width = 400
+        window_height = 300
+        screen_width = self.master.winfo_screenwidth()
+        screen_height = self.master.winfo_screenheight()
+        position_top = int(screen_height / 2 - window_height / 2)  # Calculate the top position
+        position_right = int(screen_width / 2 - window_width / 2)  # Calculate the right position
+
+        # Set the geometry of the window using the calculated coordinates at the center of the screen
+        self.master.geometry(f"{window_width}x{window_height}+{position_right}+{position_top}")
+
+        self.label_username = ttk.Label(master, text="Username:")
+        self.label_username.pack()
+
+        self.entry_username = ttk.Entry(master)
+        self.entry_username.pack()
+
+        self.label_password = ttk.Label(master, text="Password:")
+        self.label_password.pack()
+
+        self.entry_password = ttk.Entry(master, show="*")  # Show * instead of the actual password to resemble a password field
+        self.entry_password.pack()
+
+        self.button = ttk.Button(master, text="Log In", command=self.login)
+        self.button.pack()
+
+    def login(self):
+        username = self.entry_username.get()
+        password = self.entry_password.get()
+
+        print("Username: " + username)
+        print("Password: " + password)
+
+        # Check if username and password are alphanumeric
+        if username.isalnum() and password.isalnum():
+            print("Login successful")
+            self.master.destroy()  # Close the Log In Window after successful login and open the main window
+            root = Tk()
+            my_gui = GUI(root)  # Open the main GUI  after successful login
+            root.mainloop()  # Start the main GUI
+        else:
+            print("Login failed")
 
 
-def close_window():
-    root.destroy()
+class GUI:
 
-root = tk.Tk()
-root.title("Fullscreen Window")
+    def __init__(self, master):
+        self.master = master
+        master.title("CCT211: Project 2: Hotel Reservation Management System")
+        master.geometry("1000x750")  # Sets the size to 1000x750 pixels only after Escape key is pressed, leaving the fullscreen mode
 
-# Set up fullscreen variable
-fullscreen = False
+        # Set the window to fullscreen
+        self.fullscreen = False
+        self.toggle_fullscreen()  # Call the function to toggle fullscreen
 
-# Bind F11 key to toggle fullscreen
-root.bind("<F11>", toggle_fullscreen)
-root.bind("<Escape>", toggle_fullscreen)
+        # Bind Escape key to toggle fullscreen mode
+        self.master.bind("<Escape>", self.toggle_fullscreen)
 
-# Create a button to close the window
-close_button = ttk.Button(root, text="Close", command=close_window)
-close_button.pack(pady=20)
+    # Function to toggle fullscreen
+    def toggle_fullscreen(self, event=None):
+        self.fullscreen = not self.fullscreen
+        self.master.attributes("-fullscreen", self.fullscreen)
 
-# Call toggle_fullscreen to initially set the window to fullscreen
-toggle_fullscreen()
+
+root = Tk()
+login_window = LoginWindow(root)
 
 root.mainloop()
