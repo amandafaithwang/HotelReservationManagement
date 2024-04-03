@@ -1,7 +1,5 @@
 """This file contains the code for creating Tkinter GUI elements, such as windows, forms, buttons, etc."""
-
-import tkinter as tk
-from tkinter import ttk  # ttk is the themed tk module for widgets that look like the OS
+from tkinter import ttk, messagebox  # ttk is the themed tk module for widgets that look like the OS, and messagebox is for displaying alerts
 from tkinter import Tk
 
 
@@ -45,19 +43,32 @@ class LoginWindow:  # Class for the Log In Window to enter username and password
 
         # Check if username and password are alphanumeric
         if username.isalnum() and password.isalnum():
+            messagebox.showinfo("Login Successful", "Welcome to the Hotel Reservation Management System!")
             print("Login successful")
             self.master.destroy()  # Close the Log In Window after successful login and open the main window
             root = Tk()
             my_gui = GUI(root)  # Open the main GUI  after successful login
             root.mainloop()  # Start the main GUI
         else:
-            print("Login failed")
+            messagebox.showinfo("Login failed", "Invalid username or password. Please try again.")
+
+
+class Dashboard:
+    def __init__(self, master):
+        self.master = master
+        # Initialize dashboard widgets here
+
+
+    def update_data(self):
+        # Update dashboard data here
+        pass  # TODO: Edit this method to update the dashboard data
 
 
 class GUI:
-
+    """ Responsible for the general GUI set up and layout """
     def __init__(self, master):
         self.master = master
+        self.dashboard = Dashboard(master)  # Initialize the dashboard widgets and data
         master.title("CCT211: Project 2: Hotel Reservation Management System")
         master.geometry("1000x750")  # Sets the size to 1000x750 pixels only after Escape key is pressed, leaving the fullscreen mode
 
@@ -67,6 +78,22 @@ class GUI:
 
         # Bind Escape key to toggle fullscreen mode
         self.master.bind("<Escape>", self.toggle_fullscreen)
+
+        # Create the main menu (tabs) for the GUI using ttk.Notebook which will hold the tabs
+        self.notebook = ttk.Notebook(master)
+
+        # Frames for each tab
+        self.dashboard_frame = ttk.Frame(self.notebook)
+        self.room_frame = ttk.Frame(self.notebook)
+        self.bookings_frame = ttk.Frame(self.notebook)
+
+        # Add the tabs to the notebook
+        self.notebook.add(self.dashboard_frame, text="Dashboard")  # Add the dashboard tab
+        self.notebook.add(self.room_frame, text="Rooms")  # Add the rooms tab
+        self.notebook.add(self.bookings_frame, text="Bookings")  # Add the bookings tab
+
+        # Pack the notebook
+        self.notebook.pack(expand=True, fill='both')
 
     # Function to toggle fullscreen
     def toggle_fullscreen(self, event=None):
