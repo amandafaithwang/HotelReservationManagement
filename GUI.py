@@ -1,6 +1,7 @@
 """This file contains the code for creating Tkinter GUI elements, such as windows, forms, buttons, etc."""
 import tkinter as tk
-from tkinter import ttk, messagebox  # ttk is the themed tk module for widgets that look like the OS, and messagebox is for displaying alerts
+from tkinter import ttk, \
+    messagebox  # ttk is the themed tk module for widgets that look like the OS, and messagebox is for displaying alerts
 from tkinter import Tk
 from PIL import ImageTk, Image  # Import the ImageTk and Image modules from the PIL package for working with images
 import matplotlib.pyplot as plt
@@ -42,7 +43,8 @@ class LoginWindow:  # Class for the Log In Window to enter username and password
         self.label_password = ttk.Label(master, text="Password:", background="white")
         self.label_password.pack()
 
-        self.entry_password = ttk.Entry(master, show="*")  # Show * instead of the actual password to resemble a password field
+        self.entry_password = ttk.Entry(master,
+                                        show="*")  # Show * instead of the actual password to resemble a password field
         self.entry_password.pack()
 
         self.button = ttk.Button(master, text="Log In", command=self.login)
@@ -211,12 +213,28 @@ class Bookings:  # This class contains the code for the Bookings section of the 
         # Update button
         action_frame = ttk.Frame(self.bookings_frame)
         action_frame.pack(fill='x', side='bottom', pady=5)
-        self.update_btn = ttk.Button(action_frame, text="Update Booking", state='disabled', command=self.update_booking)
+        self.update_btn = ttk.Button(action_frame, text="Update Booking", state='normal', command=self.update_booking)
         self.update_btn.pack(side='left', padx=5)
-        self.delete_btn = ttk.Button(action_frame, text="Delete Booking", state='disabled', command=self.delete_booking)
+        self.delete_btn = ttk.Button(action_frame, text="Delete Booking", state='normal', command=self.delete_booking)
         self.delete_btn.pack(side='left', padx=5)
+        self.bookings_display.bind('<<TreeviewSelect>>', self.on_item_selected)
 
         self.update_bookings_display()
+
+    def on_item_selected(self, event):
+        selected = self.bookings_display.selection()
+        if selected:  # If an item is selected, enable the update and delete buttons
+            self.update_btn['state'] = 'normal'
+            self.delete_btn['state'] = 'normal'
+        else:  # No selection disables the buttons
+            self.update_btn['state'] = 'normal'
+            self.delete_btn['state'] = 'normal'
+
+    def delete_booking(self):
+        selected_item = self.bookings_display.selection()
+        self.bookings_display.delete(selected_item)
+        # Add code here to delete the selected item from the database
+        print("Booking deleted")
 
     def open_search_window(self):
         self.search_window = tk.Toplevel(self.master)
@@ -265,6 +283,10 @@ class Bookings:  # This class contains the code for the Bookings section of the 
 
     def update_booking(self):
         print("Update booking button clicked")
+        selected_item = self.bookings_display.selection()[0]  # Get selected item
+        booking_data = self.bookings_display.item(selected_item, 'values')  # Fetch item data
+        update_popup = UpdateBookingPopup(self.master, booking_data)
+        update_popup.grab_set()  # Modal window
 
     def delete_booking(self):
         print("Delete booking button clicked")
@@ -361,6 +383,7 @@ class Charts:  # This class contains the code for the Charts section of the GUI 
 
 class GUI:
     """ Responsible for the general GUI set up and layout, and instantiating the abovementioned classes to ensure the principle of Single-Responsibility that ensures efficient organization of the code """
+
     def __init__(self, master):
         self.master = master
         master.title("CCT211: Project 2: Hotel Reservation Management System")
@@ -413,7 +436,8 @@ class GUI:
             position_right = int(screen_width / 2 - window_width / 2)
 
             # Set the geometry of the window using the calculated coordinates
-            self.master.geometry(f"{window_width}x{window_height}+{position_right}+{position_top}")  # Set the window size and position to center it
+            self.master.geometry(
+                f"{window_width}x{window_height}+{position_right}+{position_top}")  # Set the window size and position to center it
 
     def on_tab_change(self, event):
         selected_tab = event.widget.select()
@@ -424,6 +448,32 @@ class GUI:
         elif tab_text == "Charts" and not self.charts_initialized:
             self.create_charts_section()
             self.charts_initialized = True  # Ensure charts section is initialized once
+
+
+class UpdateBookingPopup(tk.Toplevel):
+    def __init__(self, parent, booking_data):
+        super().__init__(parent)
+        self.title("Update Booking")
+        self.geometry("300x200")
+        self.booking_data = booking_data  # Expected to be a tuple or list of booking details
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Assuming booking_data is like: (id, room_type, stay_length, check_in, check_out)
+        ttk.Label(self, text="Room Type:").grid(row=0, column=0)
+        self.room_type = ttk.Entry(self)
+        self.room_type.grid(row=0, column=1)
+        self.room_type.insert(0, self.booking_data[1])  # Pre-populate
+
+        # Repeat for other fields as needed...
+
+        ttk.Button(self, text="Commit Changes", command=self.commit_changes).grid(row=6, column=0, columnspan=2)
+
+    def commit_changes(self):
+        # Logic to update the booking with the new details
+        # For demo, just print the new room type
+        print("Updated Room Type:", self.room_type.get())
+        self.destroy()  # Close the popup
 
 
 root = Tk()
