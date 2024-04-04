@@ -102,7 +102,7 @@ class SearchPopup(tk.Toplevel):
         self.destroy()
 
 
-class Dashboard:
+class Dashboard:  # So far this class contains Amanda's code for the dashboard.py
     def __init__(self, master):
         self.master = master
 
@@ -185,11 +185,13 @@ class GUI:
         self.dashboard_frame = ttk.Frame(self.notebook)
         self.room_frame = ttk.Frame(self.notebook)
         self.bookings_frame = ttk.Frame(self.notebook)
+        self.charts_frame = ttk.Frame(self.notebook)
 
         # Add the tabs to the notebook
         self.notebook.add(self.dashboard_frame, text="Dashboard")  # Add the dashboard tab
         self.notebook.add(self.room_frame, text="Rooms")  # Add the rooms tab
         self.notebook.add(self.bookings_frame, text="Bookings")  # Add the bookings tab
+        self.notebook.add(self.charts_frame, text="Charts")  # Add the charts tab
 
         # Pack the notebook
         self.notebook.pack(expand=True, fill='both')
