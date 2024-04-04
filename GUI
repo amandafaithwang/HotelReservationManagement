@@ -4,6 +4,7 @@ from tkinter import ttk, messagebox  # ttk is the themed tk module for widgets t
 from tkinter import Tk
 from PIL import ImageTk, Image  # Import the ImageTk and Image modules from the PIL package for working with images
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
@@ -170,13 +171,15 @@ class Rooms:  # This class contains the code for the Rooms section of the GUI
         self.master = master
 
     def create_rooms_display(self):
-        # This method should contain the code to create and display the rooms section.
+        """This method should contain the code to create and display the rooms section."""
         pass
 
 
 class Bookings:  # This class contains the code for the Bookings section of the GUI to manage bookings
     def __init__(self, master):
         self.master = master
+        self.bookings_frame = ttk.Frame(master)  # Create a frame to hold the bookings section
+        self.bookings_frame.pack(fill='both', expand=True)  # Pack the frame to fill the window
 
     def create_bookings_display(self):
         ttk.Button(self.bookings_frame, text="Search Bookings", command=self.open_search_window).pack(pady=10)
@@ -270,6 +273,8 @@ class Bookings:  # This class contains the code for the Bookings section of the 
 class Charts:  # This class contains the code for the Charts section of the GUI to display data visualizations
     def __init__(self, master):
         self.master = master
+        self.charts_frame = ttk.Frame(master)  # Create a frame to hold the charts section
+        self.charts_frame.pack(fill='both', expand=True)  # Pack the frame to fill the window
 
     def create_charts_section(self):
         # Visualization type selection
@@ -385,8 +390,13 @@ class GUI:
         # Pack the notebook
         self.notebook.pack(expand=True, fill='both')
 
-        # Initialize the dashboard widgets and data
+        # Initialize the sections for each tab using the respective classes
         self.dashboard = Dashboard(self.dashboard_frame)
+        self.rooms = Rooms(self.room_frame)
+        self.bookings = Bookings(self.bookings_frame)
+        self.bookings.create_bookings_display()
+        self.charts = Charts(self.charts_frame)
+        self.charts.create_charts_section()
 
     # Function to toggle fullscreen
     def toggle_fullscreen(self, event=None):
@@ -414,6 +424,7 @@ class GUI:
         elif tab_text == "Charts" and not self.charts_initialized:
             self.create_charts_section()
             self.charts_initialized = True  # Ensure charts section is initialized once
+
 
 root = Tk()
 login_window = LoginWindow(root)
