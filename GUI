@@ -1,12 +1,17 @@
 """This file contains the code for creating Tkinter GUI elements, such as windows, forms, buttons, etc."""
+import tkinter as tk
 from tkinter import ttk, messagebox  # ttk is the themed tk module for widgets that look like the OS, and messagebox is for displaying alerts
 from tkinter import Tk
+from PIL import ImageTk, Image  # Import the ImageTk and Image modules from the PIL package for working with images
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 class LoginWindow:  # Class for the Log In Window to enter username and password to access the main GUI
     def __init__(self, master):
         self.master = master
         self.master.title("Log In to the Hotel Reservation Management System")
+        self.master.configure(bg="white")  # Set the background color of the window to white
 
         # Calculate the coordinates for the top left corner of the window to center it
         window_width = 400
@@ -19,13 +24,21 @@ class LoginWindow:  # Class for the Log In Window to enter username and password
         # Set the geometry of the window using the calculated coordinates at the center of the screen
         self.master.geometry(f"{window_width}x{window_height}+{position_right}+{position_top}")
 
-        self.label_username = ttk.Label(master, text="Username:")
+        # Create the widgets for the Log In Window
+        logo = Image.open("logo.png")  # Load the logo image
+        logo = logo.resize((250, 150), Image.LANCZOS)  # Resize the logo image
+        logo = ImageTk.PhotoImage(logo)  # Load the logo image
+        logo_widget = ttk.Label(master, image=logo)  # Create a label widget to display the logo
+        logo_widget.image = logo  # Keep a reference to the image to prevent garbage collection
+        logo_widget.pack()
+
+        self.label_username = ttk.Label(master, text="Username:", background="white")
         self.label_username.pack()
 
         self.entry_username = ttk.Entry(master)
         self.entry_username.pack()
 
-        self.label_password = ttk.Label(master, text="Password:")
+        self.label_password = ttk.Label(master, text="Password:", background="white")
         self.label_password.pack()
 
         self.entry_password = ttk.Entry(master, show="*")  # Show * instead of the actual password to resemble a password field
@@ -53,24 +66,110 @@ class LoginWindow:  # Class for the Log In Window to enter username and password
             messagebox.showinfo("Login failed", "Invalid username or password. Please try again.")
 
 
+class SearchPopup(tk.Toplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.title("Search Filters")
+        self.geometry("400x300")
+        self.create_widgets()
+
+    def create_widgets(self):
+        ttk.Label(self, text="Arrival Date (YYYY-MM-DD):").grid(row=0, column=0, sticky="w")
+        self.arrival_date = ttk.Entry(self)
+        self.arrival_date.grid(row=0, column=1, sticky="ew")
+
+        ttk.Label(self, text="Length of Stay (days):").grid(row=1, column=0, sticky="w")
+        self.length_of_stay = ttk.Entry(self)
+        self.length_of_stay.grid(row=1, column=1, sticky="ew")
+
+        ttk.Label(self, text="Number of Adults:").grid(row=2, column=0, sticky="w")
+        self.no_of_adults = ttk.Entry(self)
+        self.no_of_adults.grid(row=2, column=1, sticky="ew")
+
+        ttk.Label(self, text="Number of Children:").grid(row=3, column=0, sticky="w")
+        self.no_of_children = ttk.Entry(self)
+        self.no_of_children.grid(row=3, column=1, sticky="ew")
+
+        ttk.Label(self, text="Room Type:").grid(row=4, column=0, sticky="w")
+        self.room_type = ttk.Combobox(self, values=["Single", "Double", "Suite"])
+        self.room_type.grid(row=4, column=1, sticky="ew")
+
+        ttk.Button(self, text="Search", command=self.search_rooms).grid(row=5, column=0, columnspan=2, pady=5)
+
+    def search_rooms(self):
+        # This method will be updated to perform the actual search
+        print("Searching for rooms...")
+        self.destroy()
+
+
 class Dashboard:
     def __init__(self, master):
         self.master = master
-        # Initialize dashboard widgets here
 
+        # Create widgets similar to dashboard amanda.py
+        self.create_widgets()
+        self.create_dashboard_placeholder()
+        self.create_room_details_section()
+        self.create_room_status_section()
+        self.create_bookings_section()
 
-    def update_data(self):
-        # Update dashboard data here
-        pass  # TODO: Edit this method to update the dashboard data
+    def create_widgets(self):
+        search_btn = ttk.Button(self.master, text="Search Rooms", command=self.open_search_popup)
+        search_btn.pack(pady=20)
+
+    def open_search_popup(self):
+        popup = SearchPopup(self.master)
+        popup.grab_set()
+
+    def create_dashboard_placeholder(self):
+        fig = plt.Figure(figsize=(6, 4), dpi=100)
+        plot = fig.add_subplot(1, 1, 1)
+        plot.set_title('Visualization Placeholder')
+        plot.plot([0, 1, 2, 3, 4], [0, 1, 4, 9, 16])
+        canvas = FigureCanvasTkAgg(fig, master=self.master)
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    def create_room_details_section(self):
+        room_details_frame = ttk.LabelFrame(self.master, text="Room Details")
+        room_details_frame.pack(fill="x", padx=20, pady=10)
+        ttk.Label(room_details_frame, text="Price:").grid(row=0, column=0)
+        ttk.Entry(room_details_frame, state='readonly').grid(row=0, column=1)
+        ttk.Label(room_details_frame, text="Capacity:").grid(row=1, column=0)
+        ttk.Entry(room_details_frame, state='readonly').grid(row=1, column=1)
+
+    def create_room_status_section(self):
+        room_status_frame = ttk.LabelFrame(self.master, text="Room Status")
+        room_status_frame.pack(fill="x", padx=20, pady=10)
+        ttk.Label(room_status_frame, text="Occupied:").grid(row=0, column=0)
+        ttk.Entry(room_status_frame, state='readonly').grid(row=0, column=1)
+        ttk.Label(room_status_frame, text="Available:").grid(row=1, column=0)
+        ttk.Entry(room_status_frame, state='readonly').grid(row=1, column=1)
+
+    def create_bookings_section(self):
+        bookings_frame = ttk.LabelFrame(self.master, text="Current Bookings")
+        bookings_frame.pack(fill="both", expand=True, padx=20, pady=10)
+        columns = ("booking_id", "room_type", "stay_length", "check_in", "check_out")
+        self.bookings_table = ttk.Treeview(bookings_frame, columns=columns, show="headings")
+        for col in columns:
+            self.bookings_table.heading(col, text=col.replace("_", " ").title())
+            self.bookings_table.column(col, anchor="center")
+        self.bookings_table.pack(fill="both", expand=True)
+
+        # Placeholder for sample booking data
+        sample_data = [("B001", "Suite", "3", "2023-10-01", "2023-10-04"),
+                       ("B002", "Double", "2", "2023-10-02", "2023-10-04")] * 5  # Multiplied to exceed 10 entries
+
+        # Insert only the first 10 entries
+        for booking in sample_data[:10]:
+            self.bookings_table.insert("", "end", values=booking)
 
 
 class GUI:
     """ Responsible for the general GUI set up and layout """
     def __init__(self, master):
         self.master = master
-        self.dashboard = Dashboard(master)  # Initialize the dashboard widgets and data
         master.title("CCT211: Project 2: Hotel Reservation Management System")
-        master.geometry("1000x750")  # Sets the size to 1000x750 pixels only after Escape key is pressed, leaving the fullscreen mode
 
         # Set the window to fullscreen
         self.fullscreen = False
@@ -95,10 +194,25 @@ class GUI:
         # Pack the notebook
         self.notebook.pack(expand=True, fill='both')
 
+        # Initialize the dashboard widgets and data
+        self.dashboard = Dashboard(self.dashboard_frame)
+
     # Function to toggle fullscreen
     def toggle_fullscreen(self, event=None):
         self.fullscreen = not self.fullscreen
         self.master.attributes("-fullscreen", self.fullscreen)
+
+        if not self.fullscreen:  # If exiting fullscreen mode set the window size to 1000x750
+            # Calculate the coordinates for the top left corner of the window to center it
+            window_width = 1000
+            window_height = 750
+            screen_width = self.master.winfo_screenwidth()  # Get the screen width
+            screen_height = self.master.winfo_screenheight()  # Get the screen height
+            position_top = int(screen_height / 2 - window_height / 2)
+            position_right = int(screen_width / 2 - window_width / 2)
+
+            # Set the geometry of the window using the calculated coordinates
+            self.master.geometry(f"{window_width}x{window_height}+{position_right}+{position_top}")  # Set the window size and position to center it
 
 
 root = Tk()
