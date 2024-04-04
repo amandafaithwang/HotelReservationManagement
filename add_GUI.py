@@ -80,6 +80,15 @@ class GUI:
         self.bookings_initialized = False
         self.charts_initialized = False  # New flag for charts initialization
 
+    def create_booking(self):
+        print("Create booking button clicked")
+
+    def update_booking(self):
+        print("Update booking button clicked")
+
+    def delete_booking(self):
+        print("Delete booking button clicked")
+
     def toggle_fullscreen(self, event=None):
         self.fullscreen = not self.fullscreen
         self.master.attributes("-fullscreen", self.fullscreen)
@@ -117,13 +126,17 @@ class GUI:
         crud_frame.pack(fill='x', pady=5)
 
         # Create button
-        ttk.Button(crud_frame, text="Create Booking", command=self.create_booking).pack(side='left', padx=5)
+        top_frame = ttk.Frame(self.bookings_frame)
+        top_frame.pack(fill='x', side='top')
+        ttk.Button(top_frame, text="Create Booking", command=self.create_booking).pack(side='right', padx=5)
 
         # Update button
-        ttk.Button(crud_frame, text="Update Booking", command=self.update_booking).pack(side='left', padx=5)
-
-        # Delete button
-        ttk.Button(crud_frame, text="Delete Booking", command=self.delete_booking).pack(side='left', padx=5)
+        action_frame = ttk.Frame(self.bookings_frame)
+        action_frame.pack(fill='x', side='bottom', pady=5)
+        self.update_btn = ttk.Button(action_frame, text="Update Booking", state='disabled', command=self.update_booking)
+        self.update_btn.pack(side='left', padx=5)
+        self.delete_btn = ttk.Button(action_frame, text="Delete Booking", state='disabled', command=self.delete_booking)
+        self.delete_btn.pack(side='left', padx=5)
 
         self.update_bookings_display()
 
