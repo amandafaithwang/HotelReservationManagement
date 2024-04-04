@@ -1,20 +1,21 @@
 import csv
 import sqlite3
 
-global conn
-global cursor
+# defining global variables before use
+global conn # connection
+global cursor # cursor
 
 
 # Connect to the sqlite database or create a new one if it doesn't exist
 def connect_database():
     global conn, cursor
-    # will create a new one.
+    # create a new one
     conn = sqlite3.connect('hotel.db')
     cursor = conn.cursor()
 
 
 # Create rooms table if doesn't exist
-# note: rooms show available rooms, static and cannot be edited
+# note: rooms show available rooms, includes only room id, room type, and average price per room
 def create_database():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Rooms (
@@ -42,6 +43,7 @@ def create_database():
     ''')
 
     # Use csv data, filter it, and insert into rooms and bookings tables
+    # need to filter csv data because csv has a lot of columns/data we are excluding
     with open('Hotel Reservations (1) - Copy.csv', 'r', newline='') as csvfile:
         csv_reader = csv.DictReader(csvfile)
         for row in csv_reader:
