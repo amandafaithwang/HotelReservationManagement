@@ -9,8 +9,10 @@ A noteworthy aspect is that we named our hotel "ACKA Hospitality" after the name
 
 ## Log In
 
-This first feature of the system is a log in portal. \n
-The widget features an image logo we created for our "ACKA Hospitality" hotel, entry fields for the username and password, and a "Log In" button. \n
+This first feature of the system is a log in portal.
+
+The widget features an image logo we created for our "ACKA Hospitality" hotel, entry fields for the username and password, and a "Log In" button.
+
 The log in portal only accepts designated credentials and features error prevention in the form of a "Login Failed" widget that pops up in cases of unsuccessful log in. The "Login Failed" widget features an "OK" button which destroys the widget and the user returns to the Log In portal.
 
 To access the system, use the following credentials:
