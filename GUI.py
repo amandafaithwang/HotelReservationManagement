@@ -1,6 +1,7 @@
 """This file contains the code for creating Tkinter GUI elements, such as windows, forms, buttons, etc."""
 import tkinter as tk
-from tkinter import ttk, messagebox, Tk, Canvas, Scrollbar  # ttk is the themed tk module for widgets that look like the OS, messagebox is for displaying alerts, and Tk is the main window class
+from tkinter import ttk, messagebox, Tk, Canvas, \
+    Scrollbar  # ttk is the themed tk module for widgets that look like the OS, messagebox is for displaying alerts, and Tk is the main window class
 from PIL import ImageTk, Image  # Import the ImageTk and Image modules from the PIL package for working with images
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
@@ -9,6 +10,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class LoginWindow:
     """Class for the Log In Window to enter username and password to access the main GUI"""
+
     def __init__(self, master):
         """Initialize the Log In Window with the given master (root) window"""
         self.master = master
@@ -43,7 +45,8 @@ class LoginWindow:
         self.label_password = ttk.Label(master, text="Password:", background='#d8cbb8')
         self.label_password.pack()
 
-        self.entry_password = ttk.Entry(master, show="*")  # Show * instead of the actual password to resemble a password field
+        self.entry_password = ttk.Entry(master,
+                                        show="*")  # Show * instead of the actual password to resemble a password field
         self.entry_password.pack()
 
         self.button = ttk.Button(master, text="Log In", command=self.login)
@@ -67,6 +70,7 @@ class LoginWindow:
 
 class SearchPopup(tk.Toplevel):
     """A popup window for searching rooms based on filters"""
+
     def __init__(self, parent):
         """Initialize the Search Popup window with the given parent window"""
         super().__init__(parent)
@@ -107,6 +111,7 @@ class SearchPopup(tk.Toplevel):
 
 class Dashboard:
     """This class contains the code for the Dashboard section of the GUI to display an overview of the hotel's status and bookings."""
+
     def __init__(self, master):
         """Initialize the Dashboard with the given master (root) window"""
         self.master = master
@@ -134,6 +139,14 @@ class Dashboard:
         canvas = FigureCanvasTkAgg(fig, master=self.master)
         canvas.draw()
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    def create_room_details_section(self):  # Create a section to display room details
+        room_details_frame = ttk.LabelFrame(self.master, text="Room Details")
+        room_details_frame.pack(fill="x", padx=20, pady=10)
+        ttk.Label(room_details_frame, text="Price:").grid(row=0, column=0)
+        ttk.Entry(room_details_frame, state='readonly').grid(row=0, column=1)
+        ttk.Label(room_details_frame, text="Capacity:").grid(row=1, column=0)
+        ttk.Entry(room_details_frame, state='readonly').grid(row=1, column=1)
 
     def create_room_status_section(self):  # Create a section to display room status
         room_status_frame = ttk.LabelFrame(self.master, text="Room Status")
@@ -164,10 +177,12 @@ class Dashboard:
 
 class Rooms:
     """This class contains the code for the Rooms section of the GUI to display room types, images, and descriptions."""
+
     def __init__(self, master):
         """"Initialize the Rooms section with the given master (root) window"""
         self.master = master
-        self.room_types = ["Type 1: Queen", "Type 2: King", "Type 3: Twins", "Type 4: Double-double", "Type 5: Jr. Suite", "Type 6: Executive Suite"]
+        self.room_types = ["Type 1: Queen", "Type 2: King", "Type 3: Twins", "Type 4: Double-double",
+                           "Type 5: Jr. Suite", "Type 6: Executive Suite"]
         self.room_images = ["queen1.jpg", "king1.jpg", "twin1.jpg", "double1.jpg", "suite1.jpg", "executivesuite1.jpg"]
         self.room_descriptions = [
             "Queen Room:\n• Cozy room with 1 queen-sized bed.\n• Ideal for 2 guests.\n• Features access to a standard balcony with beach view.\n• Price: $249",
@@ -195,13 +210,14 @@ class Rooms:
         self.scrollable_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
 
     def create_rooms_display(self):
-        """"Create the display for the Rooms section with room types, images, and descriptions."""
+        """" Create the display for the Rooms section with room types, images, and descriptions."""
         for i in range(len(self.room_types)):  # Loop through the room types and create a frame for each
             room_frame = ttk.Frame(self.scrollable_frame)  # Create a frame for the room details
             room_frame.grid(row=i, column=0, sticky='w', padx=5, pady=5)  # Grid the frame to the scrollable frame
 
             room_type = ttk.Label(room_frame, text=self.room_types[i], font=("Verdana", 14, "bold"))
-            room_type.grid(row=0, column=0, padx=(0, 5), sticky='w')  # Grid the room type label to the room frame at (0, 0)
+            room_type.grid(row=0, column=0, padx=(0, 5),
+                           sticky='w')  # Grid the room type label to the room frame at (0, 0)
 
             room_image = Image.open(self.room_images[i])
             room_image = room_image.resize((450, 300), Image.LANCZOS)  # Resize the image to fit the frame
@@ -211,15 +227,19 @@ class Rooms:
             room_image_label.grid(row=1, column=0, padx=(0, 5), sticky='w')
 
             room_description_text = self.room_descriptions[i]
-            room_name, room_details = room_description_text.split(":", 1)  # Split the text at the first colon to get the room name and details
+            room_name, room_details = room_description_text.split(":",
+                                                                  1)  # Split the text at the first colon to get the room name and details
             room_description_text = f"{room_name}:\n{room_details.replace('•', '\n•')}"  # Replace bullet points with newlines for better formatting
 
-            room_description = tk.Label(room_frame, text=room_description_text, font=("Verdana", 12), justify='left')  # Create a label for the room description with the formatted text
-            room_description.grid(row=1, column=1, padx=(0, 5), sticky='w')  # Grid the room description label to the room frame at (1, 1)
+            room_description = tk.Label(room_frame, text=room_description_text, font=("Verdana", 12),
+                                        justify='left')  # Create a label for the room description with the formatted text
+            room_description.grid(row=1, column=1, padx=(0, 5),
+                                  sticky='w')  # Grid the room description label to the room frame at (1, 1)
 
 
 class Bookings:
     """This class contains the code for the Bookings section of the GUI to manage bookings"""
+
     def __init__(self, master):
         """Initialize the Bookings section with the given master (root) window"""
         self.master = master
@@ -231,7 +251,8 @@ class Bookings:
         ttk.Button(self.bookings_frame, text="Search Bookings", command=self.open_search_window).pack(pady=10)
 
         self.current_page = 0
-        self.bookings = [("Booking ID", "Room Type", "Stay Length", "Check-in", "Check-out")] * 200
+        self.bookings = [("Booking ID", "# of Adults", "# of Children", "Room Type", "Lead Time", "Arrival Year",
+                          "Arrival Month", "Arrival Date", "Average Price of the Room", "# of Special Requests")] * 200
 
         self.bookings_display = ttk.Treeview(self.bookings_frame, columns=(1, 2, 3, 4, 5), show="headings")
         self.bookings_display.pack(fill='both', expand=True)
@@ -290,10 +311,6 @@ class Bookings:
         self.search_booking_id = ttk.Entry(self.search_window)
         self.search_booking_id.pack(pady=5)
 
-        ttk.Label(self.search_window, text="Room Type:").pack(pady=5)
-        self.search_room_type = ttk.Combobox(self.search_window, values=["Single", "Double", "Suite"])
-        self.search_room_type.pack(pady=5)
-
         ttk.Button(self.search_window, text="Search", command=self.execute_search).pack(pady=10)
 
     def execute_search(self):  # Execute the search based on the entered filters
@@ -327,17 +344,25 @@ class Bookings:
 
     def update_booking(self):  # Open a popup window to update the selected booking
         print("Update booking button clicked")
-        selected_item = self.bookings_display.selection()[0]  # Get selected item
-        booking_data = self.bookings_display.item(selected_item, 'values')  # Fetch item data
-        update_popup = UpdateBookingPopup(self.master, booking_data)
-        update_popup.grab_set()  # Modal window to prevent interaction with main window until popup is closed
+        selected_items = self.bookings_display.selection()  # Get selected items
+        if selected_items:  # Check if there are any selected items
+            selected_item = selected_items[0]  # Get the first selected item
+            booking_data = self.bookings_display.item(selected_item, 'values')  # Fetch item data
+            update_popup = UpdateBookingPopup(self.master, booking_data)
+            update_popup.grab_set()  # Modal window to prevent interaction with main window until popup is closed
+        else:
+            print("No booking selected. Please select a booking to update.")
 
     def delete_booking(self):  # TODO: Update this function to be able to delete a booking
-        print("Delete booking button clicked")
+        selected_item = self.bookings_display.selection()  # Get selected item
+        if selected_item:  # Check if there are any selected items
+            self.bookings_display.delete(selected_item)  # Delete the selected item from the display only
+            print("Booking deleted")  # TODO: Placeholder for actual deletion code but it runs fo fix it
 
 
 class Charts:
     """This class contains the code for the Charts section of the GUI to display visualizations of hotel data."""
+
     def __init__(self, master):
         """Initialize the Charts section with the given master (root) window"""
         self.master = master
@@ -431,6 +456,7 @@ class Charts:
 
 class GUI:
     """ Responsible for the general GUI set up and layout, and instantiating the above-mentioned classes to ensure the principle of Single-Responsibility that ensures efficient organization of the code """
+
     def __init__(self, master):
         """Initialize the GUI with the given master (root) window"""
         self.master = master
@@ -486,7 +512,8 @@ class GUI:
             position_right = int(screen_width / 2 - window_width / 2)
 
             # Set the geometry of the window using the calculated coordinates
-            self.master.geometry(f"{window_width}x{window_height}+{position_right}+{position_top}")  # Set the window size and position to center it
+            self.master.geometry(
+                f"{window_width}x{window_height}+{position_right}+{position_top}")  # Set the window size and position to center it
 
     def on_tab_change(self, event):
         """Method to handle tab change events and initialize the sections as needed"""
@@ -502,32 +529,68 @@ class GUI:
 
 class UpdateBookingPopup(tk.Toplevel):
     """ A popup window for updating a booking with new details, this is a child of the main window"""
+
     def __init__(self, parent, booking_data):
         """Initialize the Update Booking Popup window with the given parent window and booking data to update"""
         super().__init__(parent)
+        print("UpdateBookingPopup instantiated")
         self.title("Update Booking")
-        self.geometry("300x200")
+        self.geometry("400x300")
         self.booking_data = booking_data  # Expected to be a tuple or list of booking details
         self.create_widgets()
 
     def create_widgets(self):
         """Create the widgets for the Update Booking Popup window"""
-        # Assuming booking_data is like: (id, room_type, stay_length, check_in, check_out)
-        ttk.Label(self, text="Room Type:").grid(row=0, column=0)
-        self.room_type = ttk.Entry(self)
-        self.room_type.grid(row=0, column=1)
-        self.room_type.insert(0, self.booking_data[1])  # Pre-populate
 
-        # Repeat for other fields as needed...
+        # Create the widgets for the Update Booking Popup window using Comboboxes, Entries, and Labels
+        ttk.Label(self, text="Number of Adults:").grid(row=0, column=0,
+                                                       sticky="w")  # Grid the label for number of adults
+        self.no_of_adults = ttk.Combobox(self, values=[str(i) for i in range(1, 5)])
+        self.no_of_adults.grid(row=0, column=1)
 
-        ttk.Button(self, text="Commit Changes", command=self.commit_changes).grid(row=6, column=0, columnspan=2)
+        ttk.Label(self, text="Number of Children:").grid(row=1, column=0,
+                                                         sticky="w")  # Grid the label for number of children
+        self.no_of_children = ttk.Combobox(self, values=[str(i) for i in range(1, 5)])
+        self.no_of_children.grid(row=1, column=1)
+
+        ttk.Label(self, text="Room Type:").grid(row=2, column=0, sticky="w")  # Grid the label for room type
+        self.room_type = ttk.Combobox(self, values=["Queen", "King", "Twins", "Double-double", "Jr. Suite",
+                                                    "Executive Suite"])
+        self.room_type.grid(row=2, column=1)
+
+        ttk.Label(self, text="Lead Time (Days stayed):").grid(row=3, column=0,
+                                                              sticky="w")  # Grid the label for lead time
+        self.lead_time = ttk.Entry(self)
+        self.lead_time.grid(row=3, column=1)
+
+        ttk.Label(self, text="Arrival Year:").grid(row=4, column=0, sticky="w")  # Grid the label for arrival year
+        self.arrival_year = ttk.Entry(self)
+        self.arrival_year.grid(row=4, column=1)
+
+        ttk.Label(self, text="Arrival Month:").grid(row=5, column=0, sticky="w")  # Grid the label for arrival month
+        self.arrival_month = ttk.Combobox(self, values=[str(i) for i in range(1, 13)])
+        self.arrival_month.grid(row=5, column=1)
+
+        ttk.Label(self, text="Arrival Date:").grid(row=6, column=0, sticky="w")  # Grid the label for arrival date
+        self.arrival_date = ttk.Combobox(self, values=[str(i) for i in range(1, 32)])
+        self.arrival_date.grid(row=6, column=1)
+
+        ttk.Button(self, text="Commit Changes", command=self.commit_changes).grid(row=8, column=0, columnspan=3,
+                                                                                  pady=20,
+                                                                                  sticky="e")  # TODO fix position to be centered
 
     def commit_changes(self):
         """Method to handle the commit changes process when the button is clicked"""
-        # Logic to update the booking with the new details
-        # For demo, just print the new room type
-        print("Updated Room Type:", self.room_type.get())
-        self.destroy()  # Close the popup window after updating the booking
+        updated_data = (
+            self.room_type.get(),
+            self.no_of_adults.get(),
+            self.no_of_children.get(),
+            self.lead_time.get(),
+            self.arrival_year.get(),
+        )
+        print("Updated Booking Data:", updated_data)
+        # send the updated data back to data store
+        self.destroy()
 
 
 """The main entry point for the program, where the LoginWindow is created and the main event loop is started."""
