@@ -134,14 +134,6 @@ class Dashboard:  # So far this class contains Amanda's code for the dashboard.p
         canvas.draw()
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-    def create_room_details_section(self):
-        room_details_frame = ttk.LabelFrame(self.master, text="Room Details")
-        room_details_frame.pack(fill="x", padx=20, pady=10)
-        ttk.Label(room_details_frame, text="Price:").grid(row=0, column=0)
-        ttk.Entry(room_details_frame, state='readonly').grid(row=0, column=1)
-        ttk.Label(room_details_frame, text="Capacity:").grid(row=1, column=0)
-        ttk.Entry(room_details_frame, state='readonly').grid(row=1, column=1)
-
     def create_room_status_section(self):
         room_status_frame = ttk.LabelFrame(self.master, text="Room Status")
         room_status_frame.pack(fill="x", padx=20, pady=10)
