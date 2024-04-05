@@ -231,9 +231,14 @@ class Bookings:  # This class contains the code for the Bookings section of the 
             self.delete_btn['state'] = 'normal'
 
     def delete_booking(self):
+        """This function deletes the selected booking from the visual display and the database."""
         selected_item = self.bookings_display.selection()
         self.bookings_display.delete(selected_item)
         # Add code here to delete the selected item from the database
+        # get the selected booking THIS PART NOT COMPLETE
+        delbook = selected_item
+        # execute delete command, from the table for bookings delete selected booking
+        cursor.execute("DELETE FROM Bookings WHERE booking_id= ?",(delbook))
         print("Booking deleted")
 
     def open_search_window(self):
@@ -279,17 +284,20 @@ class Bookings:  # This class contains the code for the Bookings section of the 
             self.update_bookings_display()
 
     def create_booking(self):
+        """This function creates a new booking and commits it to the database and the display."""
         print("Create booking button clicked")
 
     def update_booking(self):
+        """This function will update the database and the display table based on changes made to a selected booking.
+        Changes include ..."""
         print("Update booking button clicked")
         selected_item = self.bookings_display.selection()[0]  # Get selected item
         booking_data = self.bookings_display.item(selected_item, 'values')  # Fetch item data
         update_popup = UpdateBookingPopup(self.master, booking_data)
         update_popup.grab_set()  # Modal window
 
-    def delete_booking(self):
-        print("Delete booking button clicked")
+    """def delete_booking(self):
+        print("Delete booking button clicked")"""
 
 
 class Charts:  # This class contains the code for the Charts section of the GUI to display data visualizations
