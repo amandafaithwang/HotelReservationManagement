@@ -194,7 +194,7 @@ class Rooms:
             room_frame = ttk.Frame(self.scrollable_frame)
             room_frame.pack(fill='x', padx=5, pady=5, anchor='w')
 
-            room_type = ttk.Label(room_frame, text=self.room_types[i])
+            room_type = ttk.Label(room_frame, text=self.room_types[i], font=("Verdana", 14, "bold"))
             room_type.pack(side='top', padx=(0, 5), anchor='w')
 
             room_image = Image.open(self.room_images[i])
