@@ -1,5 +1,6 @@
 """This file contains the code for creating Tkinter GUI elements, such as windows, forms, buttons, etc."""
 import tkinter as tk
+import sqlite3
 from tkinter import ttk, \
     messagebox  # ttk is the themed tk module for widgets that look like the OS, and messagebox is for displaying alerts
 from tkinter import Tk
