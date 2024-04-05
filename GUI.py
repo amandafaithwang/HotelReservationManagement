@@ -236,7 +236,7 @@ class Bookings:  # This class contains the code for the Bookings section of the 
         self.bookings_display.delete(selected_item)
         # Add code here to delete the selected item from the database
         # get the selected booking THIS PART NOT COMPLETE
-        delbook = selected_item
+        delbook = selected_item.booking_id # need to get booking id from selected item
         # execute delete command, from the table for bookings delete selected booking
         cursor.execute("DELETE FROM Bookings WHERE booking_id= ?",(delbook))
         print("Booking deleted")
