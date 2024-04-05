@@ -233,7 +233,17 @@ class Bookings:  # This class contains the code for the Bookings section of the 
     def delete_booking(self):
         selected_item = self.bookings_display.selection()
         self.bookings_display.delete(selected_item)
-        # Add code here to delete the selected item from the database
+        # ================================================================================NEW
+        conn = sqlite3.connect('hotel.db')
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM Bookings WHERE booking_id= ?", booking_id)
+            conn.commit()
+            conn.close()
+        # Then delete the item from the Treeview
+            self.bookings_display.delete(selected_item[0])
+            messagebox.showinfo("Success", f"Booking ID {booking_id} deleted")
+        else:
+            messagebox.showinfo("Error", "No booking selected")
         print("Booking deleted")
 
     def open_search_window(self):
@@ -257,6 +267,23 @@ class Bookings:  # This class contains the code for the Bookings section of the 
         room_type = self.search_room_type.get()
         print(f"Searching for Booking ID: {booking_id}, Room Type: {room_type}")
         self.search_window.destroy()
+        # =================================================================================NEW
+        conn = sqlite3.connect('hotel.db')
+        cursor = conn.cursor()
+
+        # search bookings by booking_id
+        search_query = """
+            SELECT * FROM Bookings
+            WHERE booking_id = ?
+        """
+
+        # execute the query
+        cursor.execute(search_query, (booking_id,))
+        # actually get the result
+        booking = cursor.fetchone()
+        conn.close()
+
+        return booking  # NOTE I THINK WE NEED TO DISPLAY THIS SOMEWHERE????
 
     def update_bookings_display(self):
         for item in self.bookings_display.get_children():
@@ -285,7 +312,28 @@ class Bookings:  # This class contains the code for the Bookings section of the 
 
     def handle_create_booking(self, booking_data):
         print("New Booking Data:", booking_data)
-        # add the logic to insert the new booking into the data store
+        #======================================================================NEW CODE HERE
+        # Connect to the sqLite database
+        conn = sqlite3.connect('hotel.db')
+        cursor = conn.cursor()
+        # note booking_data is the values for the new booking
+        # Insert new booking
+        cursor.execute("""
+            INSERT INTO Bookings (
+            no_of_adults, 
+            no_of_children, 
+            room_type_reserved,
+            lead_time,
+            arrival_year,
+            arrival_month,
+            arrival_date,
+            avg_price_per_room,
+            no_of_special_requests)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, booking_data)
+        # Commit the transaction and close
+        conn.commit()
+        conn.close()
 
     def update_booking(self):
         print("Update booking button clicked")
@@ -293,6 +341,34 @@ class Bookings:  # This class contains the code for the Bookings section of the 
         booking_data = self.bookings_display.item(selected_item, 'values')  # Fetch item data
         update_popup = UpdateBookingPopup(self.master, booking_data)
         update_popup.grab_set()  # Modal window
+        # ===========================================================================================NEW CODE HERE
+        booking_id = booking_data[0]  # get booking id from the selection
+        # connect to db
+        conn = sqlite3.connect('hotel.db')
+        cursor = conn.cursor()
+
+        # update the bookings table, set all columns
+        update_query = """
+            UPDATE Bookings
+            SET (no_of_adults, 
+            no_of_children, 
+            room_type_reserved,
+            lead_time,
+            arrival_year,
+            arrival_month,
+            arrival_date,
+            avg_price_per_room,
+            no_of_special_requests) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            WHERE CustomerID = ?
+        """
+        
+        # execute the query
+        cursor.execute(update_query, booking_id)
+
+        # commit and close
+        conn.commit()
+        conn.close()
+
 
 
 class Charts:  # This class contains the code for the Charts section of the GUI to display data visualizations
