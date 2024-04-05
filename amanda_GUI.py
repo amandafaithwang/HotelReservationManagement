@@ -233,9 +233,14 @@ class Bookings:  # This class contains the code for the Bookings section of the 
 
     def delete_booking(self):
         selected_item = self.bookings_display.selection()
-        self.bookings_display.delete(selected_item)
-        # ================================================================================NEW
-        conn = sqlite3.connect('hotel.db')
+        if selected_item:  # Ensure there's a selected item
+            # Fetch the item's details
+            item = self.bookings_display.item(selected_item[0], 'values')
+            booking_id = item[0]  # Assuming the first column is the booking ID
+            print(f"Deleting booking ID: {booking_id}")
+            # Add your logic here to delete the booking from your data store using the booking_id
+            # =======================================================================================================NEW CODE HERE
+            conn = sqlite3.connect('hotel.db')
             cursor = conn.cursor()
             cursor.execute("DELETE FROM Bookings WHERE booking_id= ?", booking_id)
             conn.commit()
@@ -245,7 +250,6 @@ class Bookings:  # This class contains the code for the Bookings section of the 
             messagebox.showinfo("Success", f"Booking ID {booking_id} deleted")
         else:
             messagebox.showinfo("Error", "No booking selected")
-        print("Booking deleted")
 
     def open_search_window(self):
         self.search_window = tk.Toplevel(self.master)
