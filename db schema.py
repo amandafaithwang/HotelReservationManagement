@@ -44,7 +44,7 @@ def create_database():
 
     # Use csv data, filter it, and insert into rooms and bookings tables
     # need to filter csv data because csv has a lot of columns/data we are excluding
-    with open('Hotel Reservations (1) - Copy.csv', 'r', newline='') as csvfile:
+    with open('small data set.csv', 'r', newline='') as csvfile:
         csv_reader = csv.DictReader(csvfile)
         for row in csv_reader:
             # Rooms table
