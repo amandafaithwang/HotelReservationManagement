@@ -1,15 +1,14 @@
 """This file contains the code for creating Tkinter GUI elements, such as windows, forms, buttons, etc."""
 import tkinter as tk
-from tkinter import ttk, \
-    messagebox  # ttk is the themed tk module for widgets that look like the OS, and messagebox is for displaying alerts
-from tkinter import Tk
+from tkinter import ttk, messagebox, Tk, Canvas, Scrollbar  # ttk is the themed tk module for widgets that look like the OS, messagebox is for displaying alerts, and Tk is the main window class
 from PIL import ImageTk, Image  # Import the ImageTk and Image modules from the PIL package for working with images
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
-class LoginWindow:  # Class for the Log In Window to enter username and password to access the main GUI
+class LoginWindow:
+    """Class for the Log In Window to enter username and password to access the main GUI"""
     def __init__(self, master):
         self.master = master
         self.master.title("Log In to the Hotel Reservation Management System")
@@ -43,8 +42,7 @@ class LoginWindow:  # Class for the Log In Window to enter username and password
         self.label_password = ttk.Label(master, text="Password:", background="white")
         self.label_password.pack()
 
-        self.entry_password = ttk.Entry(master,
-                                        show="*")  # Show * instead of the actual password to resemble a password field
+        self.entry_password = ttk.Entry(master, show="*")  # Show * instead of the actual password to resemble a password field
         self.entry_password.pack()
 
         self.button = ttk.Button(master, text="Log In", command=self.login)
@@ -54,13 +52,9 @@ class LoginWindow:  # Class for the Log In Window to enter username and password
         username = self.entry_username.get()
         password = self.entry_password.get()
 
-        print("Username: " + username)
-        print("Password: " + password)
-
         # Check if username and password are alphanumeric
-        if username.isalnum() and password.isalnum():
+        if username == "admin" and password == "cct211":
             messagebox.showinfo("Login Successful", "Welcome to the Hotel Reservation Management System!")
-            print("Login successful")
             self.master.destroy()  # Close the Log In Window after successful login and open the main window
             root = Tk()
             my_gui = GUI(root)  # Open the main GUI  after successful login
@@ -70,6 +64,7 @@ class LoginWindow:  # Class for the Log In Window to enter username and password
 
 
 class SearchPopup(tk.Toplevel):
+    """A popup window for searching rooms based on filters"""
     def __init__(self, parent):
         super().__init__(parent)
         self.title("Search Filters")
@@ -105,7 +100,8 @@ class SearchPopup(tk.Toplevel):
         self.destroy()
 
 
-class Dashboard:  # So far this class contains Amanda's code for the dashboard.py
+class Dashboard:
+    """This class contains the code for the Dashboard section of the GUI to display an overview of the hotel's status and bookings."""
     def __init__(self, master):
         self.master = master
 
@@ -127,7 +123,7 @@ class Dashboard:  # So far this class contains Amanda's code for the dashboard.p
     def create_dashboard_placeholder(self):
         fig = plt.Figure(figsize=(6, 4), dpi=100)
         plot = fig.add_subplot(1, 1, 1)
-        plot.set_title('Visualization Placeholder')
+        plot.set_title('Visualization Placeholder')  # TODO: Edit the title
         plot.plot([0, 1, 2, 3, 4], [0, 1, 4, 9, 16])
         canvas = FigureCanvasTkAgg(fig, master=self.master)
         canvas.draw()
@@ -168,16 +164,52 @@ class Dashboard:  # So far this class contains Amanda's code for the dashboard.p
             self.bookings_table.insert("", "end", values=booking)
 
 
-class Rooms:  # This class contains the code for the Rooms section of the GUI
+class Rooms:
     def __init__(self, master):
         self.master = master
+        self.room_types = ["Type 1: Queen", "Type 2: King", "Type 3: Twins", "Type 4: Double-double", "Type 5: Jr. Suite", "Type 6: Executive Suite"]
+        self.room_images = ["queen1.jpg", "king1.jpg", "twin1.jpg", "double1.jpg", "suite1.jpg", "executivesuite1.jpg"]
+        self.room_descriptions = ["Description for Queen", "Description for King", "Description for Twins",
+                                  "Description for Double-double", "Description for Jr. Suite",
+                                  "Description for Executive Suite"]
+
+        # Create a canvas and a vertical scrollbar
+        self.canvas = Canvas(master)
+        self.scrollbar = Scrollbar(master, orient="vertical", command=self.canvas.yview)
+        self.scrollable_frame = ttk.Frame(self.canvas)
+
+        # Configure the canvas to be scrollable
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.scrollbar.pack(side="right", fill="y")
+
+        # Add the scrollable frame to the canvas
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+
+        # Configure the scrollable frame to update the scroll region of the canvas when its size changes
+        self.scrollable_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
 
     def create_rooms_display(self):
-        """This method should contain the code to create and display the rooms section."""
-        pass
+        for i in range(len(self.room_types)):
+            room_frame = ttk.Frame(self.scrollable_frame)
+            room_frame.pack(fill='x', padx=5, pady=5, anchor='w')
+
+            room_type = ttk.Label(room_frame, text=self.room_types[i])
+            room_type.pack(side='top', padx=(0, 5), anchor='w')
+
+            room_image = Image.open(self.room_images[i])
+            room_image = room_image.resize((450, 300), Image.LANCZOS)
+            room_image = ImageTk.PhotoImage(room_image)
+            room_image_label = ttk.Label(room_frame, image=room_image)
+            room_image_label.image = room_image
+            room_image_label.pack(side='left', padx=(0, 5), anchor='w')
+
+            room_description = ttk.Label(room_frame, text=self.room_descriptions[i])
+            room_description.pack(side='right', padx=(0, 5), anchor='w')
 
 
-class Bookings:  # This class contains the code for the Bookings section of the GUI to manage bookings
+class Bookings:
+    """This class contains the code for the Bookings section of the GUI to manage bookings"""
     def __init__(self, master):
         self.master = master
         self.bookings_frame = ttk.Frame(master)  # Create a frame to hold the bookings section
@@ -201,7 +233,7 @@ class Bookings:  # This class contains the code for the Bookings section of the 
         self.page_number_label.pack(side='left', padx=10)
         ttk.Button(pagination_frame, text=">>", command=self.next_page).pack(side='left')
 
-        # CRUD buttons frame
+        # CRUD buttons frame for Create, Update, Delete operations on bookings
         crud_frame = ttk.Frame(self.bookings_frame)
         crud_frame.pack(fill='x', pady=5)
 
@@ -231,20 +263,15 @@ class Bookings:  # This class contains the code for the Bookings section of the 
             self.delete_btn['state'] = 'normal'
 
     def delete_booking(self):
-        """This function deletes the selected booking from the visual display and the database."""
         selected_item = self.bookings_display.selection()
         self.bookings_display.delete(selected_item)
-        # Add code here to delete the selected item from the database
-        # get the selected booking THIS PART NOT COMPLETE
-        delbook = selected_item.booking_id # need to get booking id from selected item
-        # execute delete command, from the table for bookings delete selected booking
-        cursor.execute("DELETE FROM Bookings WHERE booking_id= ?",(delbook))
+        # TODO: Add code here to delete the selected item from the database
         print("Booking deleted")
 
     def open_search_window(self):
         self.search_window = tk.Toplevel(self.master)
         self.search_window.title("Search Bookings")
-        self.search_window.geometry("300x200")  # Adjust size as needed
+        self.search_window.geometry("300x200")  # TODO: Adjust size as needed
 
         # Example search filters: Booking ID and Room Type
         ttk.Label(self.search_window, text="Booking ID:").pack(pady=5)
@@ -283,21 +310,18 @@ class Bookings:  # This class contains the code for the Bookings section of the 
             self.current_page -= 1
             self.update_bookings_display()
 
-    def create_booking(self):
-        """This function creates a new booking and commits it to the database and the display."""
+    def create_booking(self):  # TODO: Update this function to be able to create a new booking
         print("Create booking button clicked")
 
     def update_booking(self):
-        """This function will update the database and the display table based on changes made to a selected booking.
-        Changes include ..."""
         print("Update booking button clicked")
         selected_item = self.bookings_display.selection()[0]  # Get selected item
         booking_data = self.bookings_display.item(selected_item, 'values')  # Fetch item data
         update_popup = UpdateBookingPopup(self.master, booking_data)
-        update_popup.grab_set()  # Modal window
+        update_popup.grab_set()  # Modal window to prevent interaction with main window until popup is closed
 
-    """def delete_booking(self):
-        print("Delete booking button clicked")"""
+    def delete_booking(self):  # TODO: Update this function to be able to delete a booking
+        print("Delete booking button clicked")
 
 
 class Charts:  # This class contains the code for the Charts section of the GUI to display data visualizations
@@ -377,7 +401,7 @@ class Charts:  # This class contains the code for the Charts section of the GUI 
                 side='left', padx=(10, 0))
 
     def update_chart(self, chart_type):
-        # Placeholder function for updating the chart
+        # Placeholder function for updating the chart based on selected visualization type
         print(f"Updating chart: {chart_type}")
         self.plot.clear()
         if chart_type == "occupancy":
@@ -390,8 +414,7 @@ class Charts:  # This class contains the code for the Charts section of the GUI 
 
 
 class GUI:
-    """ Responsible for the general GUI set up and layout, and instantiating the abovementioned classes to ensure the principle of Single-Responsibility that ensures efficient organization of the code """
-
+    """ Responsible for the general GUI set up and layout, and instantiating the above-mentioned classes to ensure the principle of Single-Responsibility that ensures efficient organization of the code """
     def __init__(self, master):
         self.master = master
         master.title("CCT211: Project 2: Hotel Reservation Management System")
@@ -408,7 +431,7 @@ class GUI:
 
         # Frames for each tab
         self.dashboard_frame = ttk.Frame(self.notebook)
-        self.room_frame = ttk.Frame(self.notebook)
+        self.room_frame = ttk.Frame(self.notebook)  # Use ttk.Frame for the rooms tab
         self.bookings_frame = ttk.Frame(self.notebook)
         self.charts_frame = ttk.Frame(self.notebook)
 
@@ -424,6 +447,7 @@ class GUI:
         # Initialize the sections for each tab using the respective classes
         self.dashboard = Dashboard(self.dashboard_frame)
         self.rooms = Rooms(self.room_frame)
+        self.rooms.create_rooms_display()
         self.bookings = Bookings(self.bookings_frame)
         self.bookings.create_bookings_display()
         self.charts = Charts(self.charts_frame)
@@ -444,8 +468,7 @@ class GUI:
             position_right = int(screen_width / 2 - window_width / 2)
 
             # Set the geometry of the window using the calculated coordinates
-            self.master.geometry(
-                f"{window_width}x{window_height}+{position_right}+{position_top}")  # Set the window size and position to center it
+            self.master.geometry(f"{window_width}x{window_height}+{position_right}+{position_top}")  # Set the window size and position to center it
 
     def on_tab_change(self, event):
         selected_tab = event.widget.select()
@@ -459,6 +482,7 @@ class GUI:
 
 
 class UpdateBookingPopup(tk.Toplevel):
+    """ A popup window for updating a booking with new details, this is a child of the main window"""
     def __init__(self, parent, booking_data):
         super().__init__(parent)
         self.title("Update Booking")
@@ -481,10 +505,10 @@ class UpdateBookingPopup(tk.Toplevel):
         # Logic to update the booking with the new details
         # For demo, just print the new room type
         print("Updated Room Type:", self.room_type.get())
-        self.destroy()  # Close the popup
+        self.destroy()  # Close the popup window after updating the booking
 
 
-root = Tk()
-login_window = LoginWindow(root)
-
-root.mainloop()
+if __name__ == "__main__":
+    root = Tk()
+    login_window = LoginWindow(root)
+    root.mainloop()
