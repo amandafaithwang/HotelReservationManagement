@@ -9,14 +9,13 @@ def graph1():
 
     conn1 = sqlite3.connect('hotel.db')
 
-    # Query data from SQLite database for the second graph
-    query1 = "SELECT arrival_year, arrival_month, arrival_date FROM bookings"
-    df1 = pd.read_sql_query(query1, conn1)
+    # Query data from the database
+    query = "SELECT arrival_year, arrival_month, arrival_date, lead_time FROM bookings"
+    df = pd.read_sql_query(query, conn1)
 
     # Calculate check-in and check-out dates for each booking using the lead_time column
-    # Handles the conversion of dates, including handling cases where the addition of days might result in a new month or year
-    check_in_date = pd.to_datetime(df1['arrival_year'].astype(str) + '-' + df1['arrival_month'].astype(str) + '-' + df1['arrival_date'].astype(str))
-    check_out_date = check_in_date + pd.to_timedelta(df1['lead_time'], unit='D')
+    check_in_date = pd.to_datetime(df['arrival_year'].astype(str) + '-' + df['arrival_month'].astype(str) + '-' + df['arrival_date'].astype(str))
+    check_out_date = check_in_date + pd.to_timedelta(df['lead_time'], unit='D')
 
     # Create a date range for the desired time period
     start_date = check_in_date.min()
@@ -27,12 +26,12 @@ def graph1():
     occupancy_rate = []
     for date in date_range:
         num_occupied = ((check_in_date <= date) & (check_out_date > date)).sum()
-        rate = num_occupied / len(df1)
+        rate = num_occupied / len(df)
         occupancy_rate.append(rate)
 
-    # Plot the data as a line plot
+    # Plot the data
     plt.figure(figsize=(10, 6))
-    plt.plot(date_range, occupancy_rate, marker='o', linestyle='-')
+    plt.plot(date_range, occupancy_rate)
     plt.xlabel('Date')
     plt.ylabel('Occupancy Rate')
     plt.title('Room Occupancy Rate Over Time')
@@ -41,7 +40,7 @@ def graph1():
 
     conn1.close()
 
-
+"""
 # Graph 2 - Number of Bookings by Room Type
 
 def graph2():
@@ -133,3 +132,7 @@ def graph5():
     plt.show()
     
     conn5.close()
+
+
+"""
+graph1 ()
