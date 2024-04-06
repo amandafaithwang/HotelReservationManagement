@@ -84,7 +84,9 @@ Explanation of each def function:
 1. def create_widgets(self): Creates the UI elements (labels, entry fields, combobox, and search button) for the search filters. Each widget is placed in a specific row and column using the grid method.
 
 
-### 6. Charts
+### 6. Charts (visualgraphs.py)
+
+To see how these visualizations are useful to the GUI integration, please refer to the visualgraphs.py and run the file.
 
 The **Charts** tab provides visualizations of hotel data, including room occupancy rate over time, number of bookings by room type, current occupancy, and average stay duration, while leveraging the matplotlib library and pandas.
 
