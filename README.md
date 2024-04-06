@@ -69,33 +69,42 @@ Read data: Displays the existing bookings in a table format using the Treeview w
 Update Booking: Selecting a booking in the table and clicking the "Update Booking" button opens a popup window pre-filled with the booking details. Users can edit the booking details and save the changes, which are then updated in the database.
 Delete Booking: Selecting a booking in the table and clicking the "Delete Booking" button deletes the booking from the database and removes it from the table.
 
-Explanation of each function:
+Explanation of each Class:
 
-1. def __init__(self, master): Initializes the Bookings class with the given master widget as the parent. Creates a frame (self.bookings_frame) to hold the bookings section and packs it to fill the window.
+1. LoginWindow
 
-2. def create_bookings_display(self): Creates and displays the bookings table using the Treeview widget. Extracts booking data from the database, inserrts the table with the data, and sets up pages for navigating through multiple pages of bookings. Also, creates buttons for CRUD operations (Create, Update, Delete) and sets up event bindings for these operations.
+2. SearchPopup
 
-3. def on_item_selected(self, event): Event handler for when an item is selected in the bookings table. Enables/disables the update and delete buttons based on whether an item is selected.
+3. Dashboard
 
-4. def delete_booking(self): Deletes the selected booking from the database and updates the bookings table display accordingly. Displays a success message upon deletion.
+4. Rooms
 
-5. def open_search_window(self): Opens a search window for searching bookings based on booking ID and room type. Executes the search query and displays the search result.
+5. Bookings
 
-6. def execute_search(self): Executes the search query based on the provided booking ID and room type, fetches the result from the database, and returns the booking data (to be displayed somewhere in the GUI).
+6. Charts
 
-7. def update_bookings_display(self): Updates the bookings table display based on the current page number, showing 50 bookings per page.
+8. GUI
 
-8. def next_page(self): Moves to the next page of bookings in the table, updating the display accordingly.
+9. CreateBookingPopup
 
-9. def prev_page(self): Moves to the previous page of bookings in the table, updating the display accordingly.
+10. UpdateBookingPopup
 
-10. def create_booking(self): Opens a popup window for creating a new booking, using the CreateBookingPopup class, and sets up the popup window.
+---
 
-11. def handle_create_booking(self, booking_data): Handles the creation of a new booking by inserting the new booking data into the database.
+## Getting Started
 
-12. def update_booking(self): Opens a popup window for updating an existing booking, using the UpdateBookingPopup class, and sets up the popup window. Handles the update of an existing booking in the database.
+1. Log in using the provided credentials.
+2. Explore different tabs to manage bookings, view room options, and access visualizations.
 
-### 4. Charts
+---
+
+### 5. Search Popup
+
+Explanation of each def function:
+
+1. def create_widgets(self): Creates the UI elements (labels, entry fields, combobox, and search button) for the search filters. Each widget is placed in a specific row and column using the grid method.
+
+### 6. Charts
 
 The **Charts** tab provides visualizations of hotel data, including room occupancy rate over time, number of bookings by room type, current occupancy, and average stay duration, while leveraging the matplotlib library and pandas.
 
@@ -106,19 +115,6 @@ The second graph shows the 'Number of Bookings by Room Type' through a bar chart
 The third graph shows the 'Current Occupancy of the Hotel' in a pie chart, and the percentage of occupation is also shown. The purpose of the graph is to provide hotel management employees with a quick and visual representation of the current occupancy status of the hotel.
 
 The fourth graph shows the 'Average Length of Stay by Room Type' using a histogram. The purpose of this graph is to understand the distribution of stay durations among guests. This can inform staffing needs, check-in/check-out procedures, and promotions for longer stays.
-
-### 5. Search Popup
-
-Explanation of each def function:
-
-1. def create_widgets(self): Creates the UI elements (labels, entry fields, combobox, and search button) for the search filters. Each widget is placed in a specific row and column using the grid method.
-
----
-
-## Getting Started
-
-1. Log in using the provided credentials.
-2. Explore different tabs to manage bookings, view room options, and access visualizations.
 
 ---
 
