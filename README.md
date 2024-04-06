@@ -69,7 +69,7 @@ Read data: Displays the existing bookings in a table format using the Treeview w
 Update Booking: Selecting a booking in the table and clicking the "Update Booking" button opens a popup window pre-filled with the booking details. Users can edit the booking details and save the changes, which are then updated in the database.
 Delete Booking: Selecting a booking in the table and clicking the "Delete Booking" button deletes the booking from the database and removes it from the table.
 
-Explanation of each def function:
+Explanation of each function:
 
 1. def __init__(self, master): Initializes the Bookings class with the given master widget as the parent. Creates a frame (self.bookings_frame) to hold the bookings section and packs it to fill the window.
 
@@ -106,6 +106,14 @@ The second graph shows the 'Number of Bookings by Room Type' through a bar chart
 The third graph shows the 'Current Occupancy of the Hotel' in a pie chart, and the percentage of occupation is also shown. The purpose of the graph is to provide hotel management employees with a quick and visual representation of the current occupancy status of the hotel.
 
 The fourth graph shows the 'Average Length of Stay by Room Type' using a histogram. The purpose of this graph is to understand the distribution of stay durations among guests. This can inform staffing needs, check-in/check-out procedures, and promotions for longer stays.
+
+### 5. Search Popup
+
+Explanation of each def function:
+
+1. def create_widgets(self): Creates the UI elements (labels, entry fields, combobox, and search button) for the search filters. Each widget is placed in a specific row and column using the grid method.
+
+2. def search_rooms(self): This method is called when the "Search" button is clicked. It currently prints a message indicating that rooms are being searched for. This method would be updated to perform the actual search for rooms based on the search criteria provided in the entry fields and combobox. Finally, it closes the popup window using self.destroy().
 
 ---
 
