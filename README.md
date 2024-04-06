@@ -113,8 +113,6 @@ Explanation of each def function:
 
 1. def create_widgets(self): Creates the UI elements (labels, entry fields, combobox, and search button) for the search filters. Each widget is placed in a specific row and column using the grid method.
 
-2. def search_rooms(self): This method is called when the "Search" button is clicked. It currently prints a message indicating that rooms are being searched for. This method would be updated to perform the actual search for rooms based on the search criteria provided in the entry fields and combobox. Finally, it closes the popup window using self.destroy().
-
 ---
 
 ## Getting Started
