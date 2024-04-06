@@ -56,9 +56,9 @@ The **Bookings** tab allows users to manage bookings efficiently. Users can sear
 
 Search Bookings: Clicking the "Search Bookings" button opens a popup window where users can search for bookings based on criteria such as Booking ID and Room Type.
 
-Display Bookings: The tab displays bookings in a table format using a Treeview widget. Each row represents a booking and includes columns for Booking ID, Number of Adults, Number of Children, Room Type, Lead Time, Arrival Year, Arrival Month, Arrival Date, Average Price of Room, and Number of Special Requests. The table is paginated to display 50 bookings per page.
+Display Bookings: The tab displays bookings in a table format using a Treeview widget. Each row represents a booking and includes columns for Booking ID, Number of Adults, Number of Children, Room Type, Lead Time, Arrival Year, Arrival Month, Arrival Date, Average Price of Room, and Number of Special Requests. The table is fixed to display 50 bookings per page.
 
-Booking Pages: The tab includes pagination functionality with "Previous Page" and "Next Page" buttons to navigate through the booking pages.
+Booking Pages: The tab includes functionality with "Previous Page" and "Next Page" buttons to navigate through the booking pages.
 
 ### 4. Charts
 
