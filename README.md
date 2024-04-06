@@ -28,6 +28,8 @@ To access the system, use the following credentials:
 
 The **Dashboard** tab overviews the hotel's status and bookings. It displays information such as room details, room status, and current bookings. The dashboard provides visualizations and key stats for the hotel's operations. It includes sections for room details, room status, and current bookings. The room details section displays information like price and capacity. The room status section shows the number of rooms occupied and available. The current bookings section lists the booking ID, room type, length of stay, check-in date, and check-out date for the current bookings.
 
+
+
 ### 2. Rooms
 
 The **Rooms** tab showcases various room types. An image and a description accompany each room type. Images are retrieved from RIU's official website as a reference.
@@ -59,6 +61,39 @@ Search Bookings: Clicking the "Search Bookings" button opens a popup window wher
 Display Bookings: The tab displays bookings in a table format using a Treeview widget. Each row represents a booking and includes columns for Booking ID, Number of Adults, Number of Children, Room Type, Lead Time, Arrival Year, Arrival Month, Arrival Date, Average Price of Room, and Number of Special Requests. The table is fixed to display 50 bookings per page.
 
 Booking Pages: The tab includes functionality with "Previous Page" and "Next Page" buttons to navigate through the booking pages.
+
+CRUD Operations:
+
+Create Booking: Clicking the "Create Booking" button opens a popup window where users can enter details for a new booking. The new booking is then added to the database.
+Read data: Displays the existing bookings in a table format using the Treeview widget. 
+Update Booking: Selecting a booking in the table and clicking the "Update Booking" button opens a popup window pre-filled with the booking details. Users can edit the booking details and save the changes, which are then updated in the database.
+Delete Booking: Selecting a booking in the table and clicking the "Delete Booking" button deletes the booking from the database and removes it from the table.
+
+Explanation of each def function:
+
+1. def __init__(self, master): Initializes the Bookings class with the given master widget as the parent. Creates a frame (self.bookings_frame) to hold the bookings section and packs it to fill the window.
+
+2. def create_bookings_display(self): Creates and displays the bookings table using the Treeview widget. Extracts booking data from the database, inserrts the table with the data, and sets up pages for navigating through multiple pages of bookings. Also, creates buttons for CRUD operations (Create, Update, Delete) and sets up event bindings for these operations.
+
+3. def on_item_selected(self, event): Event handler for when an item is selected in the bookings table. Enables/disables the update and delete buttons based on whether an item is selected.
+
+4. def delete_booking(self): Deletes the selected booking from the database and updates the bookings table display accordingly. Displays a success message upon deletion.
+
+5. def open_search_window(self): Opens a search window for searching bookings based on booking ID and room type. Executes the search query and displays the search result.
+
+6. def execute_search(self): Executes the search query based on the provided booking ID and room type, fetches the result from the database, and returns the booking data (to be displayed somewhere in the GUI).
+
+7. def update_bookings_display(self): Updates the bookings table display based on the current page number, showing 50 bookings per page.
+
+8. def next_page(self): Moves to the next page of bookings in the table, updating the display accordingly.
+
+9. def prev_page(self): Moves to the previous page of bookings in the table, updating the display accordingly.
+
+10. def create_booking(self): Opens a popup window for creating a new booking, using the CreateBookingPopup class, and sets up the popup window.
+
+11. def handle_create_booking(self, booking_data): Handles the creation of a new booking by inserting the new booking data into the database.
+
+12. def update_booking(self): Opens a popup window for updating an existing booking, using the UpdateBookingPopup class, and sets up the popup window. Handles the update of an existing booking in the database.
 
 ### 4. Charts
 
