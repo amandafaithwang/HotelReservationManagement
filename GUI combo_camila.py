@@ -254,15 +254,6 @@ class Dashboard:
             self.bookings_table.column(col, anchor="center")
         self.bookings_table.pack(fill="both", expand=True)
 
-        # TODO: Delete this code and replace with actual booking data
-        # Placeholder for sample booking data
-        sample_data = [("B001", "Suite", "3", "2023-10-01", "2023-10-04"),
-                       ("B002", "Double", "2", "2023-10-02", "2023-10-04")] * 5  # Multiplied to exceed 10 entries
-
-        # Insert only the first 10 entries
-        for booking in sample_data[:10]:
-            self.bookings_table.insert("", "end", values=booking)
-
 
 class Rooms:
     """This class contains the code for the Rooms section of the GUI to display room types, images, and descriptions."""
@@ -274,12 +265,12 @@ class Rooms:
                            "Type 5: Jr. Suite", "Type 6: Executive Suite"]
         self.room_images = ["queen1.jpg", "king1.jpg", "twin1.jpg", "double1.jpg", "suite1.jpg", "executivesuite1.jpg"]
         self.room_descriptions = [
-            "Queen Room:\n• Cozy room with 1 queen-sized bed.\n• Ideal for 2 guests.\n• Features access to a standard balcony with beach view.\n• Price: $249",
-            "King Room:\n• Spacious room with 1 king-sized bed.\n• Perfect for 2 guests.\n• Features access to a standard balcony with beach view.\n• Price: $249",
-            "Twins Room:\n• Comfortable room with 2 twin-sized beds.\n• Great for 4 guests.\n• Does not features access to a balcony with beach view.\n• Price: $229",
-            "Double-double Room:\n• Room with 2 queen-sized beds.\n• Suitable for 4 guests.\n• Does not features access to a balcony with beach view.\n• Price: $259",
-            "Jr. Suite:\n• Luxurious suite with 1 king-sized bed, sofa bed, mini kitchen, and long balcony with beach view.\n• Ideal for 2 guests.\n• Features beach view balcony.\n• Price: $459",
-            "Executive Suite:\n• Opulent suite with 1 king-sized bed, sofa bed, mini kitchen, and 2 long balcony with beach view.\n• Perfect for 2 guests.\n• Features 2 beach view balconies.\n• Price: $559"
+            "Room Type 1: Queen Room:\n• Cozy room with 1 queen-sized bed.\n• Ideal for 2 guests.\n• Features access to a standard balcony with beach view.\n• Price: $249",
+            "Room Type 2: King Room:\n• Spacious room with 1 king-sized bed.\n• Perfect for 2 guests.\n• Features access to a standard balcony with beach view.\n• Price: $249",
+            "Room Type 3: Twins Room:\n• Comfortable room with 2 twin-sized beds.\n• Great for 4 guests.\n• Does not features access to a balcony with beach view.\n• Price: $229",
+            "Room Type 4: Double-double Room:\n• Room with 2 queen-sized beds.\n• Suitable for 4 guests.\n• Does not features access to a balcony with beach view.\n• Price: $259",
+            "Room Type 5: Jr. Suite:\n• Luxurious suite with 1 king-sized bed, sofa bed, mini kitchen, and long balcony with beach view.\n• Ideal for 2 guests.\n• Features beach view balcony.\n• Price: $459",
+            "Room Type 6: Executive Suite:\n• Opulent suite with 1 king-sized bed, sofa bed, mini kitchen, and 2 long balcony with beach view.\n• Perfect for 2 guests.\n• Features 2 beach view balconies.\n• Price: $559"
         ]
 
         # Create a canvas and a vertical scrollbar
@@ -335,7 +326,7 @@ class Bookings:
         self.bookings_frame = ttk.Frame(master)  # Create a frame to hold the bookings section
         self.bookings_frame.pack(fill='both', expand=True)  # Pack the frame to fill the window
 
-    def create_bookings_display(self):             # ===================================================================================================================================NEW CODE HERE
+    def create_bookings_display(self):
         # this is the search bookings button
         ttk.Button(self.bookings_frame, text="Search Bookings", command=self.open_search_window).pack(pady=10)
         # setting the page to zero
@@ -356,8 +347,6 @@ class Bookings:
 
         # using Treeview to make and populate table
         # defining columns
-        # TODO: Delete this initial data (below)
-        #self.bookings = ["1", "2", "3", "4"] *200
         self.bookings_display = ttk.Treeview(self.bookings_frame, columns=("Booking ID", "# of Adults", "# of Children", "Room Type", "Lead Time", "Arrival Year", "Arrival Month", "Arrival Date", "Average Price of Room", "# of Special Requests"), show="headings")
         self.bookings_display.pack(fill='both', expand=True)
         for col in self.bookings_display['columns']:
@@ -420,7 +409,6 @@ class Bookings:
             item = self.bookings_display.item(selected_item[0], 'values')
             booking_id = item[0]  # Assuming the first column is the booking ID
             print(f"Deleting booking ID: {booking_id}")
-            # Add your logic here to delete the booking from your data store using the booking_id
             conn = sqlite3.connect('hotel.db')
             cursor = conn.cursor()
             cursor.execute("DELETE FROM Bookings WHERE booking_id= ?", (booking_id,))
@@ -517,42 +505,48 @@ class Bookings:
         conn.commit()
         conn.close()
 
-    def update_booking(self):  # TODO: IT IS NOT WORKING :(
-        print("Update booking button clicked")  # TODO: Delete after checking it is correct
+    def update_booking(self):
+        print("Update booking button clicked")
         selected_item = self.bookings_display.selection()  # Get selected item
-        if selected_item:
-            booking_data = self.bookings_display.item(selected_item[0], 'values')  # Fetch item data
-            update_popup = UpdateBookingPopup(self.master, booking_data)
-            update_popup.grab_set()  # Modal window
-
-            booking_id = booking_data[0]  # get booking id from the selection
-            # connect to db
-            conn = sqlite3.connect('hotel.db')
-            cursor = conn.cursor()
-
-            # update the bookings table, set all columns
-            update_query = """
-                        UPDATE Bookings
-                        SET no_of_adults = ?,
-                        no_of_children = ?,
-                        room_type_reserved = ?,
-                        lead_time = ?,
-                        arrival_year = ?,
-                        arrival_month = ?,
-                        arrival_date = ?,
-                        avg_price_per_room = ?,
-                        no_of_special_requests = ?
-                        WHERE booking_id = ?
-                    """
-
-            # execute the query
-            cursor.execute(update_query, booking_data)
-
-            # commit and close
-            conn.commit()
-            conn.close()
-        else:  # If no item is selected
+        if not selected_item:  # If no item is selected
             messagebox.showinfo("Error", "No booking selected")
+            return
+        booking_data = self.bookings_display.item(selected_item[0], 'values')  # Fetch item data
+        update_popup = UpdateBookingPopup(self.master, booking_data, self.handle_update_booking)
+        update_popup.grab_set()  # Modal window
+
+    def handle_update_booking(self, updated_data, selected_item=None):
+        booking_id = updated_data[0]  # get booking id from the selection
+        # connect to db
+        conn = sqlite3.connect('hotel.db')
+        cursor = conn.cursor()
+
+        # update the bookings table, set all columns
+        update_query = """
+            UPDATE Bookings
+            SET no_of_adults = ?,
+            no_of_children = ?,
+            room_type_reserved = ?,
+            lead_time = ?,
+            arrival_year = ?,
+            arrival_month = ?,
+            arrival_date = ?,
+            avg_price_per_room = ?,
+            no_of_special_requests = ?
+            WHERE booking_id = ?
+        """
+
+        # execute the query
+
+        # Fetch the updated data
+        cursor.execute("SELECT * FROM Bookings WHERE booking_id = ?", (booking_id,))
+        updated_data = cursor.fetchone()
+
+        conn.close()
+
+        # Update the Treeview
+        self.bookings_display.delete(selected_item[0])
+        self.bookings_display.insert('', 'end', values=updated_data)
 
 
 class Charts:
@@ -725,13 +719,14 @@ class GUI:
 class UpdateBookingPopup(tk.Toplevel):
     """ A popup window for updating a booking with new details, this is a child of the main window"""
 
-    def __init__(self, parent, booking_data):
+    def __init__(self, parent, booking_data, callback):
         """Initialize the Update Booking Popup window with the given parent window and booking data to update"""
         super().__init__(parent)
         print("UpdateBookingPopup instantiated")
         self.title("Update Booking")
         self.geometry("400x300")
         self.booking_data = booking_data  # Expected to be a tuple or list of booking details
+        self.callback = callback
         self.create_widgets()
 
     def create_widgets(self):
@@ -749,8 +744,8 @@ class UpdateBookingPopup(tk.Toplevel):
         self.no_of_children.grid(row=1, column=1)
 
         ttk.Label(self, text="Room Type:").grid(row=2, column=0, sticky="w")  # Grid the label for room type
-        self.room_type = ttk.Combobox(self, values=["Queen", "King", "Twins", "Double-double", "Jr. Suite",
-                                                    "Executive Suite"])
+        self.room_type = ttk.Combobox(self, values=["Room_Type 1", "Room_Type 2", "Room_Type 3", "Room_Type 4", "Room_Type 5",
+                                                    "Room_Type 6"])
         self.room_type.grid(row=2, column=1)
 
         ttk.Label(self, text="Lead Time (Days stayed):").grid(row=3, column=0,
@@ -774,18 +769,19 @@ class UpdateBookingPopup(tk.Toplevel):
                                                                                   pady=20,
                                                                                   sticky="e")  # TODO fix position to be centered
 
-
     def commit_changes(self):
-        """Method to handle the commit changes process when the button is clicked"""
         updated_data = (
-            self.room_type.get(),
             self.no_of_adults.get(),
             self.no_of_children.get(),
+            self.room_type.get(),
             self.lead_time.get(),
             self.arrival_year.get(),
+            self.arrival_month.get(),
+            self.arrival_date.get(),
+            self.booking_id.get()  # Assuming you have a field for booking_id
         )
         print("Updated Booking Data:", updated_data)
-        # send the updated data back to data store
+        self.callback(updated_data)
         self.destroy()
 
 
@@ -811,7 +807,8 @@ class CreateBookingPopup(tk.Toplevel):  # ======================================
         self.no_of_children.grid(row=2, column=1)
 
         ttk.Label(self, text="Room Type Reserved:").grid(row=3, column=0)
-        self.room_type_reserved = ttk.Combobox(self, values=["Single", "Double", "Suite"])
+        self.room_type_reserved = ttk.Combobox(self, values=["Room_Type 1", "Room_Type 2", "Room_Type 3", "Room_Type 4", "Room_Type 5",
+                                                    "Room_Type 6"])
         self.room_type_reserved.grid(row=3, column=1)
 
         ttk.Label(self, text="Lead Time:").grid(row=4, column=0)
