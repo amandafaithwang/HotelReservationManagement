@@ -24,9 +24,9 @@ To access the system, use the following credentials:
 
 ## Features
 
-### 1. Dashboard (TO BE EDITED!!!!!)
+### 1. Dashboard
 
-The **Dashboard** tab overviews the hotel's status and bookings. It displays information such as room details, room status, and current bookings.
+The **Dashboard** tab overviews the hotel's status and bookings. It displays information such as room details, room status, and current bookings. The dashboard provides visualizations and key stats for the hotel's operations. It includes sections for room details, room status, and current bookings. The room details section displays information like price and capacity. The room status section shows the number of rooms occupied and available. The current bookings section lists the booking ID, room type, length of stay, check-in date, and check-out date for the current bookings.
 
 ### 2. Rooms
 
@@ -54,9 +54,23 @@ Room images are provided by the RIU hotel chain. Visit the following links to ex
 
 The **Bookings** tab allows users to manage bookings efficiently. Users can search for bookings, view current bookings, and perform CRUD (Create, Read, Update, Delete) operations.
 
+Search Bookings: Clicking the "Search Bookings" button opens a popup window where users can search for bookings based on criteria such as Booking ID and Room Type.
+
+Display Bookings: The tab displays bookings in a table format using a Treeview widget. Each row represents a booking and includes columns for Booking ID, Number of Adults, Number of Children, Room Type, Lead Time, Arrival Year, Arrival Month, Arrival Date, Average Price of Room, and Number of Special Requests. The table is paginated to display 50 bookings per page.
+
+Booking Pages: The tab includes pagination functionality with "Previous Page" and "Next Page" buttons to navigate through the booking pages.
+
 ### 4. Charts
 
-The **Charts** tab provides visualizations of hotel data, including room occupancy rate over time, number of bookings by room type, current occupancy, and average stay duration, while leveraging the matplotlib library.
+The **Charts** tab provides visualizations of hotel data, including room occupancy rate over time, number of bookings by room type, current occupancy, and average stay duration, while leveraging the matplotlib library and pandas.
+
+The first graph shows the 'Room Occupancy Rate Over Time' in a line plot graph. The purpose of this graph is to track the room occupancy rate over time (daily, monthly, yearly). This helps in identifying peak seasons, planning for high demand, and optimizing room rates.
+
+The second graph shows the 'Number of Bookings by Room Type' through a bar chart. The purpose of this graph is to show the distribution of bookings across different room types (e.g., single, double, suite). This can guide room renovation and marketing strategies.
+
+The third graph shows the 'Current Occupancy of the Hotel' in a pie chart, and the percentage of occupation is also shown. The purpose of the graph is to provide hotel management employees with a quick and visual representation of the current occupancy status of the hotel.
+
+The fourth graph shows the 'Average Length of Stay by Room Type' using a histogram. The purpose of this graph is to understand the distribution of stay durations among guests. This can inform staffing needs, check-in/check-out procedures, and promotions for longer stays.
 
 ---
 
@@ -72,7 +86,7 @@ The **Charts** tab provides visualizations of hotel data, including room occupan
 - Camila R. Flores Diaz
 - Anja Radin
 - Amanda Faith Wang
-- Kylie Zheng
+- Kiley Kailai Zheng
 
 ---
 
