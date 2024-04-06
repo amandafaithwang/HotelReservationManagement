@@ -23,7 +23,6 @@ def connect_database():
     conn = sqlite3.connect('hotel.db')
     cursor = conn.cursor()
 
-# TODO: Fix or edit this comment: Create rooms table if doesn't exist
 # note: rooms show available rooms, includes only room id, room type, and average price per room
 
 
@@ -190,7 +189,7 @@ class SearchPopup(tk.Toplevel):
 
         ttk.Button(self, text="Search", command=self.search_rooms).grid(row=5, column=0, columnspan=2, pady=5)
 
-    def search_rooms(self):  # TODO: Fix this method to perform the actual search
+    def search_rooms(self):  
         """Method to handle the search process when the Search button is clicked"""
         # This method will be updated to perform the actual search
         print("Searching for rooms...")
@@ -222,7 +221,7 @@ class Dashboard:
     def create_dashboard_placeholder(self):  # Create a placeholder visualization for the dashboard
         fig = plt.Figure(figsize=(6, 4), dpi=100)
         plot = fig.add_subplot(1, 1, 1)
-        plot.set_title('Visualization Placeholder')  # TODO: Edit the title
+        plot.set_title('Visualization')  
         plot.plot([0, 1, 2, 3, 4], [0, 1, 4, 9, 16])
         canvas = FigureCanvasTkAgg(fig, master=self.master)
         canvas.draw()
